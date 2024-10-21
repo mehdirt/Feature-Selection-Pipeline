@@ -7,7 +7,7 @@ from sklearn.linear_model import Lasso
 from .base_method import FeatureSelectionMethod
 
 class LassoMethod(FeatureSelectionMethod):
-    def __init__(self, n_features, alpha, max_iter):
+    def __init__(self, n_features, alpha=1.0, max_iter=1000):
         super().__init__(self, n_features)
         self.alpha = alpha
         self.max_iter = max_iter
@@ -35,7 +35,6 @@ class LassoMethod(FeatureSelectionMethod):
         self.mb_ = [metas[i] for i in mb_ids] # Metabolites' names
         # if len(self.mb_) >= self.n_features:
         #     print("over max_features", self.mb_)
-
         # if isinstance(self.mb_, list):
         #     self.mb_ = sorted([i for i in self.mb_ if i not in must])
         #     print(self.mb_)
