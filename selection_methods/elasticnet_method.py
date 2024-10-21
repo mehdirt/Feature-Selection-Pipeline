@@ -6,7 +6,7 @@ from sklearn.pipeline import Pipeline
 # Import base class
 from .base_method import FeatureSelectionMethod
 
-class LassoMethod(FeatureSelectionMethod):
+class ElasticNetMethod(FeatureSelectionMethod):
     def __init__(self, n_features, alpha=1.0, l1_ratio=0.5, max_iter=1000):
         super().__init__(self, n_features)
         self.alpha = alpha
