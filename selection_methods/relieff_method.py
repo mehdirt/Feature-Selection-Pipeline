@@ -1,5 +1,4 @@
 import numpy as np
-from sklearn.feature_selection import SelectFromModel
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 from skrebate import ReliefF
