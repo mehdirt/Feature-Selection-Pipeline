@@ -19,13 +19,11 @@ class WeightedLasso(Lasso):
 
 class AlassoMethod(FeatureSelectionMethod):
     def __init__(self, n_features, alpha=1.0, max_iter=1000):
-        super().__init__(self, n_features)
+        self.n_features = n_features
         self.alpha = alpha
         self.max_iter = max_iter
 
     def fit(self, X, y=None):
-        metas = list(X.columns)
-
         # Fit an initial Lasso model to get the coefficient estimates
         initial_lasso = Lasso(alpha=self.alpha, max_iter=self.max_iter)
         
@@ -56,14 +54,12 @@ class AlassoMethod(FeatureSelectionMethod):
         
         # Retrieve the selected features using the adaptive lasso coefficients
         imp = np.argsort(np.abs(pipeline.named_steps['adaptive_lasso'].coef_))[-self.n_features:]
-        print("Selected feature indices:", imp)
+        # print("Selected feature indices:", imp)
         
         # Select the most important features using SelectFromModel
         sel = SelectFromModel(pipeline.named_steps['adaptive_lasso'], prefit=True, max_features=self.n_features)
-        mb_ids = np.array(list(range(X.shape[1])))[sel.get_support()] # Metabolites' indices
+        self.mb_ = np.array(list(range(X.shape[1])))[sel.get_support()] # Metabolites' indices
         # print("self.mb_:", self.mb_)
-        
-        self.mb_ = [metas[i] for i in mb_ids] # Metabolites' names
         
         # Post-processing
         # if len(self.mb_) >= self.n_features:

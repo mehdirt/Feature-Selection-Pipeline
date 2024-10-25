@@ -7,14 +7,12 @@ from sklearn.linear_model import Lasso
 from .base_method import FeatureSelectionMethod
 
 class LassoMethod(FeatureSelectionMethod):
-    def __init__(self, n_features, alpha=1.0, max_iter=1000):
-        super().__init__(self, n_features)
+    def __init__(self, n_features, metas=[], alpha=1.0, max_iter=1000):
+        self.n_features = n_features
         self.alpha = alpha
         self.max_iter = max_iter
 
     def fit(self, X, y=None):
-        metas = list(X.columns)
-
         pipeline = Pipeline([
         ('scaler', StandardScaler()),  # Scaling
         ('lasso', Lasso(alpha=self.alpha, max_iter=self.max_iter))  # Lasso regression with alpha
@@ -30,9 +28,8 @@ class LassoMethod(FeatureSelectionMethod):
         sel = SelectFromModel(cls, prefit=True, max_features=self.n_features)
         # print("sel:",sel)
 
-        mb_ids = np.array(list(range(X.shape[1])))[sel.get_support()] # Metabolites' indices
+        self.mb_ = np.array(list(range(X.shape[1])))[sel.get_support()] # Metabolites' indices
         # print("self.mb_:", self.mb_)
-        self.mb_ = [metas[i] for i in mb_ids] # Metabolites' names
         # if len(self.mb_) >= self.n_features:
         #     print("over max_features", self.mb_)
         # if isinstance(self.mb_, list):

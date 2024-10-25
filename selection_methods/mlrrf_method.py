@@ -50,12 +50,10 @@ class MLRRFSelector(BaseEstimator, TransformerMixin):
     
 class MLRRFMethod(FeatureSelectionMethod):
     def __init__(self, n_features, random_state=42):
-        super().__init__(self, n_features)
+        self.n_features = n_features
         self.random_state = random_state
 
     def fit(self, X, y=None):
-        metas = list(X.columns)
-
         # Create the pipeline with StandardScaler and MLR-RF selector
         pipeline = Pipeline([
             ('scaler', StandardScaler()),  # Step 1: Standardize the features
@@ -66,8 +64,7 @@ class MLRRFMethod(FeatureSelectionMethod):
         pipeline.fit(X, y)
 
         # Retrieve the selected features
-        mb_ids = pipeline.named_steps['mlr_rf'].selected_features_
-        self.mb_ = [metas[i] for i in mb_ids] # Metabolites' names
+        self.mb_ = pipeline.named_steps['mlr_rf'].selected_features_
 
         # Structured output
         # print(f"Selected feature indices (up to {self.n_features}): {mb_ids}")

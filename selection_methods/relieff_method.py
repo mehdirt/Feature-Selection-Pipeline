@@ -7,12 +7,10 @@ from .base_method import FeatureSelectionMethod
 
 class ReliefFMethod(FeatureSelectionMethod):
     def __init__(self, n_features, n_neighbors=100):
-        super().__init__(self, n_features)
+        self.n_features = n_features
         self.n_neighbors = n_neighbors
 
     def fit(self, X, y=None):
-        metas = list(X.columns)
-
         pipeline = Pipeline([
         ('scaler', StandardScaler()),  # Scaling
         ('relieff', ReliefF(n_neighbors=self.n_neighbors, n_features_to_select=self.n_features, n_jobs=-1))  # ReliefF feature selection
@@ -24,12 +22,11 @@ class ReliefFMethod(FeatureSelectionMethod):
         
         # Sort features by their scores and select the top n features
         selected_indices = np.argsort(feature_scores)[-self.n_features:]
-        print("Selected feature indices:", selected_indices)
+        # print("Selected feature indices:", selected_indices)
 
         # Set the selected features to self.mb_
-        mb_ids = selected_indices # Metabolites' indices
+        self.mb_ = selected_indices # Metabolites' indices
         # print("self.mb_:", self.mb_)
-        self.mb_ = [metas[i] for i in mb_ids] # Metabolites' names
     
         # if len(self.mb_) >= self.n_features:
         #     print("over max_features", self.mb_)
