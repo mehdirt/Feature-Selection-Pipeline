@@ -3,8 +3,8 @@ class SelectionPipeline:
         self.metas = metas
         self.methods = []
         self.method_metas = {}
+        # These metabolites are excluded as characteristics due to poor peak shapes in mass spectrometry
         self.exclude_metas = ['Glycerate-2P_Glycerate-3P_neg-006','Citraconic acid_neg-025','Pyridoxine_pos-137','Argininosuccinic acid_pos-039']
-        # The above metabolites are excluded as characteristics due to poor peak shapes in mass spectrometry
 
     def add_method(self, method):
         self.methods.append(method)
